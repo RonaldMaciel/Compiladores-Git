@@ -22,7 +22,7 @@ void setIdentifierTypes(AST *node){
 	
     switch (node->type){
     case AST_DECVAR:
-        if(node->symbol->type != AST_SYMBOL){
+        if(node->symbol->type != SYMBOL_IDENTIFIER){
             printf("Semantic ERROR in line %d: Variable %s redeclaration.\n", node->lineNumber, node->symbol->text);
             SemanticErrors++;
         } else {
@@ -30,6 +30,7 @@ void setIdentifierTypes(AST *node){
             if(node->son[0]->type == AST_DECCHAR) node->symbol->datatype = DATATYPE_CHAR;
             else if(node->son[0]->type == AST_DECINT) node->symbol->datatype = DATATYPE_INT;
             else if(node->son[0]->type == AST_DECREAL) node->symbol->datatype = DATATYPE_REAL;
+            else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL;
         }
 
 		if(!isDatatypeCompatible(node->symbol->datatype, node->son[1]->symbol->datatype) ) {
@@ -47,6 +48,7 @@ void setIdentifierTypes(AST *node){
             if(node->son[0]->type == AST_DECCHAR) node->symbol->datatype = DATATYPE_CHAR;
             else if(node->son[0]->type == AST_DECINT) node->symbol->datatype = DATATYPE_INT;
             else if(node->son[0]->type == AST_DECREAL) node->symbol->datatype = DATATYPE_REAL;
+            
         }
 		if(!checkEveryVecElement(node->son[2], node->symbol->datatype)){
 			printf("Semantic ERROR on line %d: Vector declaration with elements of mixed datatype\n", node->lineNumber);
@@ -169,15 +171,24 @@ void checkUsage(AST *node){
                 SemanticErrors++;
             }
             break;
+
         case AST_FUNC_CALL:
 			validateFunction(node);
 			break;
+
         case AST_INPUT:
             checkPrint(node->son[0]);
             break;
 
+        case AST_OUTPUT:
+            if(node->son[1]->datatype != DATATYPE_INT){
+                printf("Semantic ERROR in line %d: Condition must be a boolean expression.\n", node->lineNumber);
+                SemanticErrors++;
+            }
+            break;
+
         case AST_IFLOOP:
-            if(node->son[0]->datatype != DATATYPE_BOOL){
+            if(node->son[3]->datatype != DATATYPE_BOOL){
                 printf("Semantic ERROR in line %d: Condition must be a boolean expression.\n", node->lineNumber);
                 SemanticErrors++;
             }
@@ -216,6 +227,10 @@ int isNumerical(int datatype){
     return (datatype == DATATYPE_CHAR || datatype == DATATYPE_INT || datatype == DATATYPE_REAL);
 }
 
+int isBoolean(int datatype) {
+    return (datatype == DATATYPE_BOOL);
+}
+
 int isRelationalOp(int nodetype){
     return (nodetype == AST_LESS || nodetype == AST_GREATER || nodetype == AST_EQ || nodetype == AST_LE || nodetype == AST_GE || nodetype == AST_DIF);
 }
@@ -246,7 +261,6 @@ void checkPrint(AST *node){
         }
     }
     checkPrint(node->son[1]);
-
 }
 
 void validateFunction(AST *node){

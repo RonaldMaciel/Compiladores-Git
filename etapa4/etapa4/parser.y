@@ -9,13 +9,13 @@
     #include "ast.h"
     #include "hash.h"
     #include "semantic.h"
-
+    
     int yylex();
     int yyerror();
     extern int getLineNumber();
 
     AST *root;
-    int SemanticErrors;
+    extern int SemanticErrors;
 %}
 
 %union{
@@ -90,7 +90,7 @@ declarat : declarations declarat           { $$ = astCreate(AST_DECLARAT, 0, $1,
 
 
 declarations : tipo TK_IDENTIFIER '=' literal ';'                           { $$ = astCreate(AST_DECVAR, $2, $1, $4, 0, 0, getLineNumber());}
-             | tipo TK_IDENTIFIER '[' LIT_INT ']' create_array ';'          { $$ = astCreate(AST_DECARRAY, $2, $1, astCreate(AST_ARGVEC, $4, 0, 0, 0, 0), $6, 0, getLineNumber());}
+             | tipo TK_IDENTIFIER '[' LIT_INT ']' create_array ';'          { $$ = astCreate(AST_DECARRAY, $2, $1, astCreate(AST_ARGVEC, $4, 0, 0, 0, 0, getLineNumber()), $6, 0, getLineNumber() );}
              | tipo TK_IDENTIFIER '(' func_parameters ')' bloco             { $$ = astCreate(AST_DECFUNC, $2, $1, $4, $6, 0, getLineNumber());}
              ;
 
@@ -132,7 +132,7 @@ commands_list : commands commands_list   { $$ = astCreate(AST_COMMANDOLIST, 0, $
 
 commands : bloco                                                { $$ = $1; }
          | TK_IDENTIFIER '=' expr ';'                           { $$ = astCreate(AST_ATTR, $1, $3, 0, 0, 0, getLineNumber());}
-         | TK_IDENTIFIER '[' expr ']' '=' expr ';'              { $$ = astCreate(AST_ARR_ATTR, $1, $3, $6, 0, 0), getLineNumber());}            
+         | TK_IDENTIFIER '[' expr ']' '=' expr ';'              { $$ = astCreate(AST_ARR_ATTR, $1, $3, $6, 0, 0, getLineNumber());}            
          | KW_IF '(' expr ')' commands                          { $$ = astCreate(AST_IF, 0, $3, $5, 0, 0, getLineNumber());}
          | KW_IF '(' expr ')' commands KW_ELSE commands         { $$ = astCreate(AST_IFELSE, 0, $3, $5, $7, 0, getLineNumber());}              
          | KW_IF '(' expr ')' KW_LOOP commands                  { $$ = astCreate(AST_IFLOOP, 0, $3, $6, 0, 0, getLineNumber());}       
@@ -149,15 +149,15 @@ end_output :                                        { $$ = 0; }
            | ',' elements_to_output end_output      { $$ = astCreate(AST_OUTPUTLIST, 0, $2, $3, 0, 0, getLineNumber());}
            ;
 
-elements_to_output : LIT_STRING              { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), getLineNumber());}
+elements_to_output : LIT_STRING              { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0, getLineNumber());}
                    | expr                    { $$ = $1; }
                    ;
 
 
 expr : literal                                  { $$ = $1; }
-     | TK_IDENTIFIER                            { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), getLineNumber());}
-     | TK_IDENTIFIER '[' expr ']'               { $$ = astCreate(AST_ARRAY, $1, $3, 0, 0,0), getLineNumber());}
-     | TK_IDENTIFIER '(' arguments_list ')'     { $$ = astCreate(AST_FUNC_CALL, $1, $3, 0, 0,0), getLineNumber());}
+     | TK_IDENTIFIER                            { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0, getLineNumber());}
+     | TK_IDENTIFIER '[' expr ']'               { $$ = astCreate(AST_ARRAY, $1, $3, 0, 0,0, getLineNumber());}
+     | TK_IDENTIFIER '(' arguments_list ')'     { $$ = astCreate(AST_FUNC_CALL, $1, $3, 0, 0,0, getLineNumber());}
      | expr '+' expr                            { $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0, getLineNumber());}
      | expr '-' expr                            { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0, getLineNumber());} 
      | expr '*' expr                            { $$ = astCreate(AST_MUL, 0, $1, $3, 0, 0, getLineNumber());}

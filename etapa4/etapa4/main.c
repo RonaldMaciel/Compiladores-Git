@@ -1,25 +1,24 @@
 /* Autor: Ronald de Souza Maciel - 00281987 */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "hash.h"
+#include <stdlib.h>
 #include "decompiler.h"
 #include "semantic.h"
+#include "ast.h"
 
+extern char *yytext;
 extern FILE *yyin;
-extern FILE* file();
-extern int yyparse();
-
+extern int yylex();
 extern int isRunning();
-extern int getLineNumber();
-extern int getNumberOfErrors();
-
 extern void initMe();
 extern void hashPrint();
-
+extern int yyparse();
+extern int getLineNumber();
 extern int checkSemantic();
-
+extern int getNumberOfErrors();
 extern AST *root;
+extern FILE* file();
 
 FILE* initFile(char *file, char *modes) {
     FILE *fileInput;
@@ -33,7 +32,7 @@ FILE* initFile(char *file, char *modes) {
 int main(int argc, char** argv) {
 
     if (argc < 3) {
-        printf("Call program with: ./etapa3 sample.txt output.txt\n");
+        printf("Call program with: ./etapa4 sample.txt output.txt\n");
         exit(1);
     }
     
@@ -45,7 +44,7 @@ int main(int argc, char** argv) {
     
     yyparse();
 
-    hashPrint();
+    // hashPrint();
     astPrint(root, 0);
     decompileRoot(root, outputFile);
     checkSemantic();

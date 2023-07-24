@@ -22,8 +22,8 @@ HASH_NODE* hashInsert(char* text, int type){
     
     newnode = (HASH_NODE*) calloc(1, sizeof(HASH_NODE));
     newnode -> type = type;
-    if(newnode->type == SYMBOL_LIT_CARA) newnode->datatype = DATATYPE_INTE;
-    else if(newnode->type == SYMBOL_LIT_INTE) newnode->datatype = DATATYPE_INTE;
+    if(newnode->type == SYMBOL_LIT_CHAR) newnode->datatype = DATATYPE_INT;
+    else if(newnode->type == SYMBOL_LIT_INT) newnode->datatype = DATATYPE_INT;
     else if(newnode->type == SYMBOL_LIT_REAL) newnode->datatype = DATATYPE_REAL;
 
     newnode -> text = (char*) calloc(strlen(text)+1, sizeof(char));
