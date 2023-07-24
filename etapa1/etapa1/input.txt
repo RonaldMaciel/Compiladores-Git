@@ -1,0 +1,26 @@
+\\\
+	Ronald de Souza Maciel - 00281987
+	TRABALHO DE COMPILADORES - ETAPA 1
+
+///
+
+\\ comentando em uma linha 
+
+char b = 'a';
+int abc__ = 123;
+real real_ = 2.5;
+
+if(abc__ == 123) then
+	output "BOMBOU \"VAMOOO!!\"\n";
+else
+	output "\"NAO BOMBOU!!\" - tente novamente";
+
+loop(123 <= AAA || (123 >= ABB && 123 != O) || (23 == ABC))
+{
+	input "digita ai :)";
+	output "ID";
+}
+
+@@ \\ dois erros aqui
+
+return 'a';

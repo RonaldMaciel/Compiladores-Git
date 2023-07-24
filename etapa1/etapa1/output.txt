@@ -1,0 +1,116 @@
+Texto: comentario | Token: 280
+Texto: de | Token: 280
+Texto: 1 | Token: 281
+Texto: uma | Token: 280
+Texto: "" | Token: 286
+Texto: linha | Token: 280
+Texto: cara | Token: 256
+Texto: b | Token: 290
+Texto: = | Token: 61
+Texto: 'a' | Token: 285
+Texto: ; | Token: 59
+Texto: inte | Token: 257
+Texto: abc__123 | Token: 280
+Texto: = | Token: 61
+Texto: 123 | Token: 281
+Texto: ; | Token: 59
+Texto: real | Token: 258
+Texto: real_123 | Token: 280
+Texto: = | Token: 61
+Texto: 2.5 | Token: 282
+Texto: ; | Token: 59
+Texto: se | Token: 261
+Texto: ( | Token: 40
+Texto: abc__123 | Token: 280
+Texto: == | Token: 272
+Texto: 123 | Token: 281
+Texto: ) | Token: 41
+Texto: entaum | Token: 262
+Texto: print | Token: 280
+Texto: ( | Token: 40
+Texto: "BOMBOU \"VAMOOO!!\"\n" | Token: 286
+Texto: ) | Token: 41
+Texto: ; | Token: 59
+Texto: senaum | Token: 263
+Texto: print | Token: 280
+Texto: ( | Token: 40
+Texto: "\"NAO BOMBOU!!\" - tente novamente" | Token: 286
+Texto: ) | Token: 41
+Texto: ; | Token: 59
+Texto: enquanto | Token: 264
+Texto: ( | Token: 40
+Texto: 123 | Token: 281
+Texto: <= | Token: 270
+Texto: A | Token: 290
+Texto: A | Token: 290
+Texto: A | Token: 290
+Texto: or | Token: 280
+Texto: ( | Token: 40
+Texto: 123 | Token: 281
+Texto: >= | Token: 271
+Texto: A | Token: 290
+Texto: B | Token: 290
+Texto: B | Token: 290
+Texto: and | Token: 280
+Texto: 123 | Token: 281
+Texto: != | Token: 273
+Texto: O | Token: 290
+Texto: ) | Token: 41
+Texto: or | Token: 280
+Texto: not | Token: 280
+Texto: ( | Token: 40
+Texto: 23 | Token: 281
+Texto: == | Token: 272
+Texto: A | Token: 290
+Texto: B | Token: 290
+Texto: C | Token: 290
+Texto: ) | Token: 41
+Texto: ) | Token: 41
+Texto: { | Token: 123
+Texto: entrada | Token: 266
+Texto: ( | Token: 40
+Texto: "digita ai :) \n" | Token: 286
+Texto: , | Token: 44
+Texto: & | Token: 38
+Texto: b | Token: 290
+Texto: ) | Token: 41
+Texto: ; | Token: 59
+Texto: escreva | Token: 267
+Texto: ( | Token: 40
+Texto: I | Token: 290
+Texto: D | Token: 290
+Texto: ) | Token: 41
+Texto: ; | Token: 59
+Texto: } | Token: 125
+Texto: % | Token: 290
+Texto: @ | Token: 290
+Texto: Z | Token: 290
+Texto: Z | Token: 290
+Texto: dois | Token: 280
+Texto: erros | Token: 280
+Texto: aqui | Token: 280
+Texto: retorne | Token: 268
+Texto: 'a' | Token: 285
+Texto: ; | Token: 59
+Table[49] - type: 281 text: 1
+Table[58] - type: 280 text: print
+Table[190] - type: 286 text: "\"NAO BOMBOU!!\" - tente novamente"
+Table[193] - type: 286 text: ""
+Table[207] - type: 280 text: real_123
+Table[231] - type: 280 text: de
+Table[343] - type: 280 text: and
+Table[343] - type: 280 text: linha
+Table[350] - type: 280 text: comentario
+Table[391] - type: 280 text: dois
+Table[419] - type: 286 text: "digita ai :) \n"
+Table[464] - type: 280 text: uma
+Table[607] - type: 281 text: 23
+Table[651] - type: 280 text: not
+Table[664] - type: 286 text: "BOMBOU \"VAMOOO!!\"\n"
+Table[680] - type: 280 text: erros
+Table[763] - type: 282 text: 2.5
+Table[794] - type: 280 text: abc__123
+Table[804] - type: 280 text: or
+Table[812] - type: 285 text: 'a'
+Table[875] - type: 280 text: aqui
+Table[932] - type: 281 text: 123
