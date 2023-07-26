@@ -18,7 +18,6 @@ extern int getLineNumber();
 extern int checkSemantic();
 extern int getNumberOfErrors();
 extern AST *root;
-extern FILE* file();
 
 FILE* initFile(char *file, char *modes) {
     FILE *fileInput;

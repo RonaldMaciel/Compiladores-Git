@@ -15,7 +15,9 @@ void checkUndeclared();
 
 void checkUsage(AST* node);
 
-bool checkEveryVecElement(AST * node, int datatype);
+void checkOutput(AST *node);
+
+int checkEveryVecElement(AST * node, int datatype);
 
 int isDatatypeCompatible(int datatype1, int datatype2);
 
@@ -24,7 +26,7 @@ int isInteger(int datatype);
 int isCharacter(char datatype1);
 
 int isNumerical(int datatype);
-
+ 
 int isRelationalOp(int nodetype);
 
 int isAritmeticOp(int nodetype);
@@ -34,8 +36,6 @@ int isLogicalOp(int nodetype);
 int greaterDatatype(int type1, int type2);
 
 void validateFunction(AST * node);
-
-void checkPrint(AST *node);
 
 AST *findFunctionDeclaration(char * name, AST * node);
 
