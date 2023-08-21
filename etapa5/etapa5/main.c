@@ -1,23 +1,26 @@
 /* Autor: Ronald de Souza Maciel - 00281987 */
 
 #include <stdio.h>
-#include "hash.h"
 #include <stdlib.h>
+#include "hash.h"
 #include "decompiler.h"
-#include "semantic.h"
+#include "tacs.h" 
 #include "ast.h"
 
-extern char *yytext;
 extern FILE *yyin;
-extern int yylex();
+extern FILE* file();
+extern int yyparse();
+
 extern int isRunning();
+extern int getLineNumber();
+extern int getNumberOfErrors();
+
 extern void initMe();
 extern void hashPrint();
-extern int yyparse();
-extern int getLineNumber();
-extern int semanticsValidation();
-extern int getNumberOfErrors();
+
 extern AST *root;
+
+extern tac *getTACs();
 
 FILE* initFile(char *file, char *modes) {
     FILE *fileInput;
@@ -31,7 +34,7 @@ FILE* initFile(char *file, char *modes) {
 int main(int argc, char** argv) {
 
     if (argc < 3) {
-        printf("Call program with: ./etapa4 sample.txt output.txt\n");
+        printf("Call program with: ./etapa3 sample.txt output.txt\n");
         exit(1);
     }
     
@@ -43,15 +46,15 @@ int main(int argc, char** argv) {
     
     yyparse();
 
-    // hashPrint();
-    // astPrint(root, 0);
+    //hashPrint();
+    //astPrint(root, 0);
     decompileRoot(root, outputFile);
+    printAllTacs(getTACs()); 
 
-    fclose(outputFile);
-
-    semanticsValidation();
+    printf("Number of lines: %d\n\n", getLineNumber());
+    printf("Number of errors: %d\n\n", getNumberOfErrors());
 
     fprintf(stderr, "Compilation Completed Successfully!\n\n");
-    
-    return 0;
+  
+  return 0;
 }

@@ -7,72 +7,68 @@
 
 #include "hash.h"
 
-enum{
-    AST_SYMBOL,
+#define AST_SYMBOL 1
+#define AST_ATTR 2
+#define AST_ARR_ATTR 3
+#define AST_PARAMLIST 4
+#define AST_PARAMINIT 5
+#define AST_DECLARAT 6 
+#define AST_DECVAR 7
+#define AST_DECFUNC 8 
 
-    AST_ATTR,
-    AST_ARR_ATTR,
-    AST_PARAMLIST,
-    AST_PARAMINIT,
-    AST_DECLARAT,
-    AST_DECVAR,
-    AST_DECFUNC,
+#define AST_DECCHAR 9
+#define AST_DECINT 10
+#define AST_DECREAL 11
+#define AST_DECBOOL 12
 
-    AST_DECINT,
-    AST_DECCHAR,
-    AST_DECREAL,
-    AST_DECBOOL,
+#define AST_IF 13
+#define AST_IFTHEN 14
+#define AST_IFELSE 15
+#define AST_IFLOOP 16
 
-    AST_IF,
-    AST_IFTHEN,
-    AST_IFELSE,
-    AST_IFLOOP,
+#define AST_INPUT 17
+#define AST_OUTPUT 18
+#define AST_OUTPUTINIT 19
+#define AST_OUTPUTLIST 20
+#define AST_RETURN 21
 
-    AST_INPUT,
-    AST_OUTPUT,
-    AST_OUTPUTINIT,
-    AST_OUTPUTLIST,
-    AST_RETURN,
+#define AST_LE 22 
+#define AST_GE 23
+#define AST_EQ 24
+#define AST_DIF 25
 
-    AST_LE,
-    AST_GE,
-    AST_EQ,
-    AST_DIF,
+#define AST_ARRAY 26 
+#define AST_ARGINIT 27 
 
-    AST_ARRAY,
-    AST_ARGINIT,
+#define AST_DECARRAY 28
+#define AST_INIT_ARRAY 29
+#define AST_FUNC_CALL 30 
 
-    AST_DECARRAY,
-    AST_INIT_ARRAY,
-    AST_FUNC_CALL,
+#define AST_BLOCO 31
 
-    AST_BLOCO,
+#define AST_ADD 32
+#define AST_SUB 33
+#define AST_MUL 34
+#define AST_DIV 35
 
-    AST_ADD,
-    AST_SUB,
-    AST_MUL,
-    AST_DIV,
+#define AST_AND 36
+#define AST_OR 37
+#define AST_NOT 38
+#define AST_LESS 39
+#define AST_GREATER 40 
 
-    AST_AND,
-    AST_OR,
-    AST_NOT, 
-    AST_LESS,
-    AST_GREATER,
+#define AST_ARGFUNCCALL 41
+#define AST_ARGFUNCCALLLIST 42
 
-    AST_ARGFUNCCALL,
-    AST_ARGFUNCCALLLIST,
+#define AST_PROGRAM 43
+#define AST_PARENTESES 44
 
-    AST_PROGRAM,
-    AST_PARENTESES,
+#define AST_COMMANDOLIST 45
+#define AST_ARGVEC 46
+#define AST_ARR_ELEMENT 47
 
-    AST_COMMANDOLIST,
-    AST_ARGVEC,
-    AST_ARR_ELEMENT,
 
-};
-
-typedef struct astnode
-{
+typedef struct astnode{
     int type;
     int datatype;
     int lineNumber;

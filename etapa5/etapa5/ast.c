@@ -1,15 +1,14 @@
 // Abstract Syntax Tree
-#include "hash.h"
+
 #include "ast.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 AST *astCreate(int type, HASH_NODE *symbol, 
-               AST *s0, AST *s1, AST *s2, AST *s3, int lineNumber){
+               AST *s0, AST *s1, AST *s2, AST *s3){
     AST *newnode;
     newnode = (AST*) calloc(1, sizeof(AST));
     newnode->type = type;
-    newnode->lineNumber = lineNumber;
     newnode->symbol = symbol;
     newnode->son[0] = s0;
     newnode->son[1] = s1;

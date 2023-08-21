@@ -8,11 +8,11 @@ AST *ROOT;
 int semanticVerification(AST * root){
     ROOT = root;
 				
-	setIdentifierTypes(root); 
-    setNodeTypes(root);
+	setIdentifierTypes(ROOT); 
+    setNodeTypes(ROOT);
 	checkUndeclared();
-	checkUsage(root);
-    checkReturns(root);
+	checkUsage(ROOT);
+    checkReturns(ROOT);
 
     return SemanticErrors;
 }
@@ -33,11 +33,12 @@ void setIdentifierTypes(AST *node){
             else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL;
         }
 
-		if(!isDatatypeCompatible(node->symbol->datatype, node->son[1]->symbol->datatype) ) {
-			printf("Semantic ERROR in line %d: Variable declaration with mixed dataypes\n", node->lineNumber);
+		if(isDatatypeCompatible(node->symbol->datatype, node->son[1]->symbol->datatype) == 0 ) {
+			printf("Semantic ERROR in line %d: Variable %s declaration with mixed dataypes\n", node->lineNumber, node->symbol->text);
 			SemanticErrors++;
 		}
         break;
+
     case AST_DECARRAY:
         if(node->symbol->type != SYMBOL_IDENTIFIER){
             printf("Semantic ERROR in line %d: Vector %s redeclaration.\n", node->lineNumber, node->symbol->text);
@@ -51,11 +52,11 @@ void setIdentifierTypes(AST *node){
             else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL;
         }
 
-		if(!isDatatypeCompatible(node->symbol->datatype, node->son[1]->symbol->datatype) ) {
-			printf("Semantic ERROR in line %d: Variable declaration with mixed dataypes\n", node->lineNumber);
-			SemanticErrors++;
-		}
-        break;;
+    	if(!isDatatypeCompatible(node->symbol->datatype, node->son[1]->symbol->datatype)) {
+            printf("Semantic ERROR in line %d: Vector %s declaration with mixed dataypes\n", node->lineNumber, node->symbol->text);
+	    	SemanticErrors++;
+	    }
+        break;
 
     case AST_DECFUNC:
         if(node->symbol->type != SYMBOL_IDENTIFIER){
@@ -66,17 +67,12 @@ void setIdentifierTypes(AST *node){
             if(node->son[0]->type == AST_DECCHAR) node->symbol->datatype = DATATYPE_CHAR;
             else if(node->son[0]->type == AST_DECINT) node->symbol->datatype = DATATYPE_INT;
             else if(node->son[0]->type == AST_DECREAL) node->symbol->datatype = DATATYPE_REAL;
-            else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL; 
-
-            if (node->son[1] != NULL) {
-                if (node->son[1]->type == AST_DECINT) {
-                    node->symbol->datatype = DATATYPE_INT;
-                }
-            }           
+            else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL;          
         }
         break;
 
-    case AST_PARAMINIT: case AST_PARAMLIST:
+    case AST_PARAMINIT: 
+    case AST_PARAMLIST:
         if(node->symbol->type != SYMBOL_IDENTIFIER){
             printf("Semantic ERROR in line %d: Parameter %s redeclaration.\n", node->lineNumber, node->symbol->text);
             SemanticErrors++;
@@ -87,12 +83,6 @@ void setIdentifierTypes(AST *node){
             else if(node->son[0]->type == AST_DECINT) node->symbol->datatype = DATATYPE_INT;
             else if(node->son[0]->type == AST_DECREAL) node->symbol->datatype = DATATYPE_REAL;
             else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL;
-
-            if (node->son[1] != NULL) {
-                if (node->son[1]->type == AST_DECINT) {
-                    node->symbol->datatype = DATATYPE_INT;
-                }
-            }
         }
         break;
     default:
@@ -129,7 +119,7 @@ void setNodeTypes(AST *node){
     else if(isAritmeticOp(node->type)){
         AST* son0 = node->son[0];
         AST* son1 = node->son[1];
-        if(!isDatatypeCompatible(son0->datatype, son1->datatype)){
+        if(!isDatatypeCompatible(son0->datatype, son1->datatype) || son0->datatype == DATATYPE_BOOL || son1->datatype == DATATYPE_BOOL) {
             printf("Semantic ERROR in line %d: Arithmetic operation with incompatible data types.\n", node->lineNumber);
             SemanticErrors++;
         }
@@ -148,17 +138,16 @@ void setNodeTypes(AST *node){
                 printf("Semantic ERROR in line %d: Logical operation with incompatible data types.\n", node->lineNumber);
                 SemanticErrors++;
             }
-        }
-        else if(node->son[0]->datatype != DATATYPE_BOOL || node->son[1]->datatype != DATATYPE_BOOL){
+        } else if(node->son[0]->datatype != DATATYPE_BOOL || node->son[1]->datatype != DATATYPE_BOOL){
             printf("Semantic ERROR in line %d: Logical operation with incompatible data types.\n", node->lineNumber);
             SemanticErrors++;
         }
         node->datatype = DATATYPE_BOOL;
     } else if(node->type == AST_INPUT) {
-        if(node->son[0]->type == AST_DECCHAR) node->symbol->datatype = DATATYPE_CHAR;
-        else if(node->son[0]->type == AST_DECINT) node->symbol->datatype = DATATYPE_INT;
-        else if(node->son[0]->type == AST_DECREAL) node->symbol->datatype = DATATYPE_REAL;
-        else if(node->son[0]->type == AST_DECBOOL) node->symbol->datatype = DATATYPE_BOOL;
+        if(node->son[0]->type == AST_DECCHAR) node->datatype = DATATYPE_CHAR;
+        else if(node->son[0]->type == AST_DECINT) node->datatype = DATATYPE_INT;
+        else if(node->son[0]->type == AST_DECREAL) node->datatype = DATATYPE_REAL;
+        else if(node->son[0]->type == AST_DECBOOL) node->datatype = DATATYPE_BOOL;
         else {
             printf("Semantic ERROR in line %d: Invalid operation with INPUT type.\n", node->lineNumber);
             SemanticErrors++;
@@ -186,6 +175,7 @@ void checkUsage(AST *node){
                 SemanticErrors++;
             }
             break;
+
         case AST_ARR_ATTR:
             if(node->symbol->type != SYMBOL_VEC){
                 printf("Semantic ERROR in line %d: Indexing only allowed for vectors.\n", node->lineNumber);
@@ -207,7 +197,7 @@ void checkUsage(AST *node){
 
         case AST_INPUT:
             if (node->datatype != DATATYPE_CHAR && node->datatype != DATATYPE_INT && node->datatype != DATATYPE_REAL && node->datatype != DATATYPE_BOOL) {
-                printf("Semantir error - input needs a scalar variable. Line %d\n", node->lineNumber);
+                printf("Semantir error - input doesn't match a scalar variable. Line %d\n", node->lineNumber);
                 SemanticErrors++;
             }
             break;
@@ -261,11 +251,11 @@ void checkOutput(AST *node) {
 }
 
 int isDatatypeCompatible(int datatype1, int datatype2) {
-    return (isInteger(datatype1) && isInteger(datatype2)) || (datatype1 == datatype2 );
+    return (isInteger(datatype1) && isInteger(datatype2) || datatype1 == datatype2);
 }
 
 int isInteger(int datatype){
-    return (datatype == DATATYPE_CHAR || datatype == DATATYPE_INT) || (datatype == DATATYPE_BOOL);
+    return datatype == DATATYPE_CHAR || datatype == DATATYPE_INT || datatype == DATATYPE_BOOL;
 }
 
 int isNumerical(int datatype){
@@ -296,19 +286,19 @@ void validateFunction(AST *node){
         SemanticErrors++;
     }
 	else if(checkNumberOfArguments(node, declaration)){
-		compareCalledArguments(node->son[0], declaration->son[1]);					
+		compareCalledArguments(node->son[0], declaration);					
 	}
 }
 
-bool checkNumberOfArguments(AST *node, AST *declaration){
+int checkNumberOfArguments(AST *node, AST *declaration){
 	int numberOfCalledArguments = getNumberOfArguments(node->son[0]);
 	int numberOfDeclaredArguments = getNumberOfArguments(declaration->son[1]);	
 	if(numberOfCalledArguments != numberOfDeclaredArguments){
     	printf("Semantic ERROR in line %d: Incompatible number of arguments.\n", node->lineNumber);
 		SemanticErrors++;
-		return false;
+		return 0;
 	}
-	return true;
+	return 1;
 }
 
 AST* findFunctionDeclaration(char * name, AST * node){
@@ -354,14 +344,14 @@ void compareCalledArguments(AST *node, AST *declaration){
 	}
 }
 
-int checkEveryVecElement(AST * node, int datatype){	
+bool checkEveryVecElement(AST * node, int datatype){	
 	if(node != NULL){
-		if(!isDatatypeCompatible(node->son[1]->symbol->datatype, datatype))
-			return 0;
+		if(!isDatatypeCompatible(node->son[0]->symbol->datatype, datatype))
+			return false;
 		if(node->son[1] != NULL)
 			return checkEveryVecElement(node->son[1], datatype);
 	}
-	return 1;
+	return true;
 }
 
 void isReturnCompatible(AST *node, int datatype){

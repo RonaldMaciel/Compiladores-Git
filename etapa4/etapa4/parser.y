@@ -80,7 +80,7 @@
 
 %%
 
-program : declarat                         { $$ = astCreate(AST_PROGRAM, 0, $1, 0, 0, 0, getLineNumber()); root = $$; SemanticErrors=semanticVerification(root); }
+program : declarat                         { root = $$; SemanticErrors=semanticVerification(root); }
         ;
 
 
@@ -116,8 +116,8 @@ tipo : KW_CHAR                 { $$ = astCreate(AST_DECCHAR, 0, 0, 0, 0, 0, getL
      ;
 
 
-create_array :                             { $$ = 0;}
-             | literal create_array        { $$ = astCreate(AST_ARR_ELEMENT, 0, $1, $2, 0, 0, getLineNumber());}
+create_array : literal create_array        { $$ = astCreate(AST_ARR_ELEMENT, 0, $1, $2, 0, 0, getLineNumber());}                             
+             |                             { $$ = 0;}
              ;
 
 
@@ -188,7 +188,7 @@ arguments_list_end : ',' expr arguments_list_end    { $$ = astCreate(AST_ARGFUNC
 
 %%
 
-void checkSemantic(){
+void semanticsValidation(){
   if(SemanticErrors > 0){
     fprintf(stderr, "%d Semantic Errors in Total.\n", SemanticErrors);
     exit(4);
